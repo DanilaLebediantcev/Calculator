@@ -1,9 +1,10 @@
 package Main;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 class Calculator {
-    Double calculate(List<String> polishNotationEquation) {
+    BigDecimal calculate(List<String> polishNotationEquation) {
         for (int i = 0; i < polishNotationEquation.size(); i++) {
 
             if (ReversePolishNotation.mathOperation.containsKey(polishNotationEquation.get(i))) {
@@ -32,7 +33,7 @@ class Calculator {
             }
         }
 
-        return Double.parseDouble(polishNotationEquation.get(0));
+        return new BigDecimal(polishNotationEquation.get(0)).setScale(2, BigDecimal.ROUND_UNNECESSARY);
     }
 
     private void removeElementFromList(List<String> list, int i) {

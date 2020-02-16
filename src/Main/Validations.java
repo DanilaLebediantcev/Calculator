@@ -1,40 +1,30 @@
 package Main;
 
-import java.io.IOException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class Validations {
-    private List<String> rightSybmols = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "+", "-", "*", "/");
-    private List<String> allSymbolsList = new Console().enterExample().chars().mapToObj(x -> (char) x).map(Objects::toString).collect(Collectors.toList());
-    private List<String> equation = new ArrayList<>();
+class Validations {
+    private List<String> rightSymbols = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "+", "-", "*", "/");
+    private List<String> newList = new ArrayList<>();
 
-    Validations() throws IOException {
-    }
 
-    List<String> allValidations() throws IOException {
-        if (!firstAndLastSymbolNotOperation() || !checkRightSymbols()) {
-            allSymbolsList = new Console().enterExample().chars().mapToObj(x -> (char) x).map(Objects::toString).collect(Collectors.toList());
-            allValidations();
-        }
-        return allSymbolsList;
-    }
-
-    private boolean firstAndLastSymbolNotOperation() throws IOException {
+    boolean firstAndLastSymbolNotOperation(List<String> list) {
         boolean number = true;
-        if (ReversePolishNotation.mathOperation.containsKey(allSymbolsList.get(0)) || ReversePolishNotation.mathOperation.containsKey(allSymbolsList.get(allSymbolsList.size() - 1))) {
+        if (ReversePolishNotation.mathOperation.containsKey(list.get(0)) || ReversePolishNotation.mathOperation.containsKey(list.get(list.size() - 1))) {
             System.out.println("Вы ввели некорректные данные, уравнение не может начаться или заканчиваться математической операцией");
             number = false;
         }
         return number;
     }
 
-    private boolean checkRightSymbols() throws IOException {
+    boolean checkRightSymbols(List<String> list) {
         boolean number = true;
-        for (String value : allSymbolsList) {
-            if (!rightSybmols.contains(value)) {
-                number = false;
+        for (String value : list) {
+            for (char bufval : value.toCharArray()) {
+                if (!rightSymbols.contains(String.valueOf(bufval))) {
+                    number = false;
+                    break;
+                }
             }
         }
         if (!number) {
@@ -43,11 +33,30 @@ public class Validations {
         return number;
     }
 
-    private boolean divisionByZero() throws IOException {
-        List<String> startEquation = new ArrayList<>();
-        for (int i = 0; i < allSymbolsList.size(); i++){
-            if(ReversePolishNotation.i)
+    boolean divisionByZero(List<String> list) {
+        boolean trueFalse = true;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals("/")) {
+                if (Double.parseDouble(list.get(i + 1)) == 0.0) {
+                    System.out.println("Делить на 0 нельзя! Введите уравнение заново:");
+                    trueFalse = false;
+                    break;
+                }
+            }
         }
+        return trueFalse;
+    }
+
+    boolean severalOperation(List<String> list) {
+        boolean trueFalse = true;
+        for (int i = 0; i < list.size(); i++) {
+            if (ReversePolishNotation.mathOperation.containsKey(list.get(i)) && ReversePolishNotation.mathOperation.containsKey(list.get(i + 1))) {
+                System.out.println("Не может идти несколько математических операций подряд. Введите уравнение заново:");
+                trueFalse = false;
+                break;
+            }
+        }
+        return trueFalse;
     }
 
 }
