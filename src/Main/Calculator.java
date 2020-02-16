@@ -33,7 +33,7 @@ class Calculator {
             }
         }
 
-        return new BigDecimal(polishNotationEquation.get(0)).setScale(2, BigDecimal.ROUND_UNNECESSARY);
+        return new BigDecimal(polishNotationEquation.get(0)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
     private void removeElementFromList(List<String> list, int i) {
